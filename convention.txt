@@ -1,0 +1,13 @@
+Oscar kann unterschiedliche optionen für prefix und substring suchen.
+Bisher war ref und int_ref nur in der prefix-suche, nicht in der substring suche.
+Das sorgt für Unterschiede.
+
+Achtung:
+Wenn values/tags in lowercase gespeichert werden, dann MUSS dies auch in IndexConfig angepasst werden.
+Diacritic removal MUSS ausgeschalten sein.
+Die Prefix und Substring value selection muss gleich sein.
+Wenn alle tags (auch name etc.) hinzugefügt werden, dann muss das in ocse.Document auch gemacht werden
+
+Am besten die oomgeocell_ocse config nutzen
+
+mg4j ohne positions kann kein difference

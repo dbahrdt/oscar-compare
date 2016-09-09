@@ -1,0 +1,5 @@
+lucene/*
+mg4j/*
+
+!mg4j/.keep
+!lucene/.keep

@@ -1,0 +1,3 @@
+[submodule "vendor/libjoscar"]
+	path = vendor/libjoscar
+	url = https://github.com/dbahrdt/libjoscar.git

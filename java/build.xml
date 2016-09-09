@@ -1,0 +1,95 @@
+<project name="ocse" default="bundle" basedir=".">
+	<description>
+		ocse build file
+	</description>
+<!-- set global properties for this build -->
+<property name="src" location="src"/>
+<property name="build" location="build"/>
+<property name="dist"  location="dist"/>
+<property name="libs"  location="libs"/>
+
+<path id="project.class.path">
+	<pathelement location="${dist}/deps/ocse-deps.jar"/>
+	<pathelement location="${libs}/libjoscar/liboscar.jar"/>
+<!-- 	<fileset dir="${libs}/mg4j" includes="*.jar" /> -->
+	<pathelement path="${java.class.path}"/>
+</path>
+
+<!--<property name="myclasspath" refid="project.class.path"/>
+<echo message="Classpath = ${myclasspath}"/>-->
+
+<target name="init">
+	<tstamp/>
+</target>
+
+<target name="bundledeps">
+	<mkdir dir="${dist}/deps"/>
+	<jar zip64Mode="as-needed" destfile="${dist}/deps/ocse-deps.jar" filesetmanifest="mergewithoutmain" duplicate="add" update="false">
+		<zipgroupfileset dir="${libs}/lucene" includes="*.jar" />
+<!--There seem to be some jars in the mg4j deps that cause javac to give up compilation
+	There are no errors at all. It just doesn't ouput class-files 
+	So we have to add the needed jars one by one. Stupid java.
+	-->
+		<zipgroupfileset dir="${libs}/mg4j" includes="mg4j*.jar" />
+		<zipgroupfileset dir="${libs}/mg4j-deps" includes="dsi*.jar" />
+		<zipgroupfileset dir="${libs}/mg4j-deps" includes="fastutil*.jar" />
+		<zipgroupfileset dir="${libs}/mg4j-deps" includes="commons-*.jar" />
+		<zipgroupfileset dir="${libs}/mg4j-deps" includes="slf4j*.jar" />
+		<zipgroupfileset dir="${libs}/mg4j-deps" includes="jsap*.jar" />
+		<zipgroupfileset dir="${libs}/mg4j-deps" includes="log*.jar" />
+		
+	</jar>
+</target>
+
+<target name="compile" depends="init">
+	<mkdir dir="${build}"/>
+	<javac srcdir="${src}" 
+			destdir="${build}"
+			includeantruntime="false"
+			classpathref="project.class.path"
+			debug="false"
+			debuglevel="lines,vars,source"
+	verbose="no">
+<!-- 		<classpath refid="project.class.path"/> -->
+	</javac>
+</target>
+
+<target name="dist" depends="compile">
+	<mkdir dir="${dist}/lib"/>
+	<jar jarfile="${dist}/lib/ocse.jar" basedir="${build}">
+		<fileset dir="${build}"/>
+		<zipgroupfileset dir="${libs}/libjoscar" includes="*.jar" />
+		<manifest>
+			<attribute name="Main-Class" value="de.fmi.ocse.Main"/>
+		</manifest>
+	</jar>
+</target>
+
+<target name="bundle" depends="bundledeps,dist" description="generate a bundle containing ocse and its deps">
+	<mkdir dir="${dist}/bin"/>
+	<jar zip64Mode="as-needed" destfile="${dist}/bin/ocse-bundle.jar" filesetmanifest="skip" duplicate="add">
+		<zipgroupfileset dir="${dist}/lib" includes="*.jar"/>
+		<zipgroupfileset dir="${dist}/deps" includes="*.jar"/>
+		<manifest>
+			<attribute name="Main-Class" value="de.fmi.ocse.Main"/>
+		</manifest>
+	</jar>
+</target>
+
+<target name="mg4jdebug" depends="bundledeps,dist" description="generate a bundle containing mg4j and its deps">
+	<mkdir dir="${dist}/bin"/>
+	<jar zip64Mode="as-needed" destfile="${dist}/bin/mg4jdebug.jar" filesetmanifest="skip" duplicate="add">
+		<zipgroupfileset dir="${dist}/lib" includes="*.jar"/>
+		<zipgroupfileset dir="${dist}/deps" includes="*.jar"/>
+		<manifest>
+			<attribute name="Main-Class" value="de.fmi.ocse.MG4JSearchDebug"/>
+		</manifest>
+	</jar>
+</target>
+
+<target name="clean" description="clean up" >
+	<!-- Delete the ${build} and ${dist} directory trees -->
+	<delete dir="${build}"/>
+	<delete dir="${dist}"/>
+</target>
+</project>

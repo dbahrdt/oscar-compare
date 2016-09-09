@@ -1,0 +1,24 @@
+{
+	"terminals" : [],
+	"queries" : [
+		{ 
+			"_comment" : "a comment",
+			"t" : "and|or|diff|str|prefix|suffix|exact|item|region",
+			"first" : {
+				"t" : "str|prefix|suffix",
+				"s" : "sample_query_token"
+			},
+			"second" : {
+				"t" : "or",
+				"first" : {
+					"t" : "str|prefix",
+					"s" : "sample_query_token2"
+				},
+				"second" : {
+					"t" : "str|exact|item",
+					"s" : "sample_query_token3"
+				}
+			}
+		}
+	]
+}

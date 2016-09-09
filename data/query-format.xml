@@ -1,0 +1,13 @@
+<ocse>
+	<query>
+		<and>
+			<str q="super duper"/>
+			<str q="market"/>
+			<or>
+				<str exact="false" prefix="false" suffix="false" region="false" item="false" q="super duper 2"/>
+				<tag exact="false" prefix="false" region="false" item="false" q="amenity:horse"/>
+			</or>
+		</and>
+	<query/>
+	...
+<ocse>
