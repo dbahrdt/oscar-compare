@@ -7,6 +7,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StoredField;
 import org.apache.lucene.index.*;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.search.SimpleCollector;
@@ -78,6 +79,9 @@ class LuceneSearch implements SearchInterface {
 		public boolean acceptsDocsOutOfOrder() {
 			return true;
 		}
+
+		@Override
+		public ScoreMode scoreMode() {return org.apache.lucene.search.ScoreMode.COMPLETE_NO_SCORES; }
 
 		@Override
 		public void collect(int arg0) throws IOException {
